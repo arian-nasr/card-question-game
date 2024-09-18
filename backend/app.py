@@ -142,6 +142,7 @@ def approveQuestions():
         game = collection.find_one({"lobbyCode": lobbyCode})
         players = game['players']
         approvedQuestions = game['approvedQuestions']
+        # Because games are more fun with friends <3
         if len(players) > 1:
             if all(player in approvedQuestions for player in players):
                 getCommonApproved(lobbyCode)
