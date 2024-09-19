@@ -82,6 +82,8 @@ body {
 <script>
 import axios from 'axios';
 
+const API_URL = 'http://192.168.2.158:5000';
+
 export default {
   data() {
     return {
@@ -125,7 +127,7 @@ export default {
       try {
         const formData = new FormData();
         formData.append('lobbyCode', this.lobbyCode);
-        const response = await axios.post('http://192.168.2.158:5000/startVoting', formData, {
+        const response = await axios.post(`${API_URL}/startVoting`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -140,7 +142,7 @@ export default {
         formData.append('lobbyCode', this.lobbyCode);
         formData.append('name', this.name);
         formData.append('approvedQuestions', JSON.stringify(this.approvedQuestions));
-        const response = await axios.post('http://192.168.2.158:5000/approveQuestions', formData, {
+        const response = await axios.post(`${API_URL}/approveQuestions`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -160,7 +162,7 @@ export default {
 
       const poll = async () => {
         try {
-        const response = await axios.post('http://192.168.2.158:5000/checkPlayers', formData, {
+        const response = await axios.post(`${API_URL}/checkPlayers`, formData, {
           headers: {
           'Content-Type': 'multipart/form-data'
           }
@@ -197,7 +199,7 @@ export default {
       formData.append('lobbyCode', this.lobbyCode);
       formData.append('name', this.name);
 
-      const response = await axios.post('http://192.168.2.158:5000/joinGame', formData, {
+      const response = await axios.post(`${API_URL}/joinGame`, formData, {
         headers: {
         'Content-Type': 'multipart/form-data'
         }
@@ -225,7 +227,7 @@ export default {
 
       const poll = async () => {
         try {
-        const response = await axios.post('http://192.168.2.158:5000/checkStatus', formData, {
+        const response = await axios.post(`${API_URL}/checkStatus`, formData, {
           headers: {
           'Content-Type': 'multipart/form-data'
           }
@@ -255,7 +257,7 @@ export default {
         // We probably don't need to send the name here since both users in the same lobby will get the same questions
         //formData.append('name', this.name);
 
-        const response = await axios.post('http://192.168.2.158:5000/getQuestions', formData, {
+        const response = await axios.post(`${API_URL}/getQuestions`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -275,7 +277,7 @@ export default {
       const formData = new FormData();
       formData.append('lobbyCode', this.lobbyCode);
 
-      const response = await axios.post('http://192.168.2.158:5000/getCommonQuestions', formData, {
+      const response = await axios.post(`${API_URL}/getCommonQuestions`, formData, {
         headers: {
         'Content-Type': 'multipart/form-data'
         }
