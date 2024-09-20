@@ -1,14 +1,7 @@
 <template>
   <main>
 
-    <div v-if="showLobby" class="showLobby">
-      <h1>Lobby Code: {{ lobbyCode }}</h1>
-      <button class="btn btn-primary" @click="startGame">Start Game</button>
-      <p>Players:</p>
-      <p v-for="(player, index) in players" :key="index">
-        {{ player }}
-      </p>
-    </div>
+    <Lobby v-if="showLobby" :lobbyCode="lobbyCode" :players="players" @start-game="startGame" />
 
     <div v-if="showLogin" class="showLogin">
       <form @submit.prevent="handleSubmit">
@@ -82,9 +75,14 @@ body {
 <script>
 import axios from 'axios';
 
+import Lobby from './components/Lobby.vue';
+
 const API_URL = 'http://192.168.2.158:5000';
 
 export default {
+  components: {
+    Lobby
+  },
   data() {
     return {
       lobbyCode: '',
