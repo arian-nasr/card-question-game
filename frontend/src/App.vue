@@ -1,8 +1,6 @@
 <template>
   <main>
 
-    <Lobby v-if="showLobby" :lobbyCode="lobbyCode" :players="players" @start-game="startGame" />
-
     <div v-if="showLogin" class="showLogin">
       <form @submit.prevent="handleSubmit">
           <div class="mb-3">
@@ -14,6 +12,8 @@
           <button type="submit" class="btn btn-primary" ref="submitButton">Submit</button>
       </form>
     </div>
+
+    <Lobby v-if="showLobby" :lobbyCode="lobbyCode" :players="players" @start-game="startGame" />
 
     <VotingPhaseNotify v-if="showVotingPhaseNotify" />
 
@@ -31,7 +31,7 @@
     </div>
 
     <CommonCards v-if="showCommonCards" :commonQuestions="commonQuestions" />
-    
+
   </main>
 </template>
 <style>
