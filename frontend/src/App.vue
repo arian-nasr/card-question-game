@@ -1,53 +1,16 @@
 <template>
   <main>
 
-    <div v-if="showLobby" class="showLobby">
-      <h1>Lobby Code: {{ lobbyCode }}</h1>
-      <button class="btn btn-primary" @click="startGame">Start Game</button>
-      <p>Players:</p>
-      <p v-for="(player, index) in players" :key="index">
-        {{ player }}
-      </p>
-    </div>
+    <Login v-if="showLogin" :submitButtonText="submitButtonText" :lobbyCode="lobbyCode" :name="name" @update:lobbyCode="lobbyCode = $event" @update:name="name = $event" @submit="handleSubmit" />
 
-    <div v-if="showLogin" class="showLogin">
-      <form @submit.prevent="handleSubmit">
-          <div class="mb-3">
-              <label for="lobbycodeinput1" class="form-label">Lobby Code</label>
-              <input type="text" class="form-control" id="lobbycodeinput1" v-model="lobbyCode">
-              <label for="nameinput1" class="form-label">Your Name</label>
-              <input type="text" class="form-control" id="nameinput1" v-model="name">
-          </div>
-          <button type="submit" class="btn btn-primary" ref="submitButton">Submit</button>
-      </form>
-    </div>
+    <Lobby v-if="showLobby" :lobbyCode="lobbyCode" :players="players" @start-game="startGame" />
 
-    <div v-if="showVotingPhaseNotify" class="voting-phase-notify">
-        <h1>Voting Phase:</h1>
-        <p>Decide which questions you're comfortable with answering</p>
-    </div>
+    <VotingPhaseNotify v-if="showVotingPhaseNotify" />
 
-    <div v-if="showVotingCards" class="cardholder">
-        <!-- Dynamically load question cards -->
-        <div v-for="(question, index) in questions" :key="index" class="card">
-            <div class="card-body">
-                {{ question }}
-            </div>
-            <div class="card-footer">
-                <a href="#" class="card-link" @click.prevent="voteOnCard(index, true)">Accept</a>
-                <a href="#" class="card-link" @click.prevent="voteOnCard(index, false)">Decline</a>
-            </div>
-        </div>
-    </div>
+    <VotingCards v-if="showVotingCards" :questions="questions" @vote-on-card="voteOnCard" />
 
-    <div v-if="showCommonCards" class="cardholder">
-        <!-- Dynamically load common cards -->
-        <div v-for="(question, index) in commonQuestions" :key="index" class="card">
-            <div class="card-body">
-                {{ question }}
-            </div>
-        </div>
-    </div>
+    <CommonCards v-if="showCommonCards" :commonQuestions="commonQuestions" />
+
   </main>
 </template>
 <style>
@@ -82,9 +45,22 @@ body {
 <script>
 import axios from 'axios';
 
+import Login from './components/Login.vue';
+import Lobby from './components/Lobby.vue';
+import VotingPhaseNotify from './components/VotingPhaseNotify.vue';
+import CommonCards from './components/CommonCards.vue';
+import VotingCards from './components/VotingCards.vue';
+
 const API_URL = 'http://192.168.2.158:5000';
 
 export default {
+  components: {
+    Login,
+    Lobby,
+    VotingPhaseNotify,
+    CommonCards,
+    VotingCards
+  },
   data() {
     return {
       lobbyCode: '',
@@ -98,7 +74,8 @@ export default {
       rejectedQuestions: [], // New property to store rejected questions
       showCommonCards: false,
       commonQuestions: [], // New property to store common questions
-      players: [] // New property to store players
+      players: [], // New property to store players
+      submitButtonText: 'Submit'
     }
   },
   methods: {
@@ -108,8 +85,7 @@ export default {
         if (!this.approvedQuestions.includes(this.questions[index])) {
           this.approvedQuestions.push(this.questions[index]); // Add the question to the approved list if not already present
         }
-      }
-      if (!accept) {
+      } else {
         // Check if the question is not already in the rejected list
         if (!this.rejectedQuestions.includes(this.questions[index])) {
           this.rejectedQuestions.push(this.questions[index]); // Add the question to the rejected list if not already present
@@ -211,11 +187,11 @@ export default {
         await this.pollPlayers();
       } else {
         console.error('Failed to join the game:', response.data);
-        this.$refs.submitButton.innerText = 'Failed to join the game';
+        this.submitButtonText = 'Failed to join the game';
       }
       } catch (error) {
         console.error('Error joining the game:', error);
-        this.$refs.submitButton.innerText = 'Error joining the game';
+        this.submitButtonText = 'Error joining the game';
       }
     },
 
