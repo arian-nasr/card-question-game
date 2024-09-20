@@ -1,17 +1,7 @@
 <template>
   <main>
 
-    <div v-if="showLogin" class="showLogin">
-      <form @submit.prevent="handleSubmit">
-          <div class="mb-3">
-              <label for="lobbycodeinput1" class="form-label">Lobby Code</label>
-              <input type="text" class="form-control" id="lobbycodeinput1" v-model="lobbyCode">
-              <label for="nameinput1" class="form-label">Your Name</label>
-              <input type="text" class="form-control" id="nameinput1" v-model="name">
-          </div>
-          <button type="submit" class="btn btn-primary" ref="submitButton">Submit</button>
-      </form>
-    </div>
+    <Login v-if="showLogin" :submitButtonText="submitButtonText" :lobbyCode="lobbyCode" :name="name" @update:lobbyCode="lobbyCode = $event" @update:name="name = $event" @submit="handleSubmit" />
 
     <Lobby v-if="showLobby" :lobbyCode="lobbyCode" :players="players" @start-game="startGame" />
 
@@ -55,6 +45,7 @@ body {
 <script>
 import axios from 'axios';
 
+import Login from './components/Login.vue';
 import Lobby from './components/Lobby.vue';
 import VotingPhaseNotify from './components/VotingPhaseNotify.vue';
 import CommonCards from './components/CommonCards.vue';
@@ -64,6 +55,7 @@ const API_URL = 'http://192.168.2.158:5000';
 
 export default {
   components: {
+    Login,
     Lobby,
     VotingPhaseNotify,
     CommonCards,
@@ -82,7 +74,8 @@ export default {
       rejectedQuestions: [], // New property to store rejected questions
       showCommonCards: false,
       commonQuestions: [], // New property to store common questions
-      players: [] // New property to store players
+      players: [], // New property to store players
+      submitButtonText: 'Submit'
     }
   },
   methods: {
@@ -194,11 +187,11 @@ export default {
         await this.pollPlayers();
       } else {
         console.error('Failed to join the game:', response.data);
-        this.$refs.submitButton.innerText = 'Failed to join the game';
+        this.submitButtonText = 'Failed to join the game';
       }
       } catch (error) {
         console.error('Error joining the game:', error);
-        this.$refs.submitButton.innerText = 'Error joining the game';
+        this.submitButtonText = 'Error joining the game';
       }
     },
 
