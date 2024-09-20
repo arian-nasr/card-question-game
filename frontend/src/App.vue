@@ -17,18 +17,7 @@
 
     <VotingPhaseNotify v-if="showVotingPhaseNotify" />
 
-    <div v-if="showVotingCards" class="cardholder">
-        <!-- Dynamically load question cards -->
-        <div v-for="(question, index) in questions" :key="index" class="card">
-            <div class="card-body">
-                {{ question }}
-            </div>
-            <div class="card-footer">
-                <a href="#" class="card-link" @click.prevent="voteOnCard(index, true)">Accept</a>
-                <a href="#" class="card-link" @click.prevent="voteOnCard(index, false)">Decline</a>
-            </div>
-        </div>
-    </div>
+    <VotingCards v-if="showVotingCards" :questions="questions" @vote-on-card="voteOnCard" />
 
     <CommonCards v-if="showCommonCards" :commonQuestions="commonQuestions" />
 
@@ -69,6 +58,7 @@ import axios from 'axios';
 import Lobby from './components/Lobby.vue';
 import VotingPhaseNotify from './components/VotingPhaseNotify.vue';
 import CommonCards from './components/CommonCards.vue';
+import VotingCards from './components/VotingCards.vue';
 
 const API_URL = 'http://192.168.2.158:5000';
 
@@ -76,7 +66,8 @@ export default {
   components: {
     Lobby,
     VotingPhaseNotify,
-    CommonCards
+    CommonCards,
+    VotingCards
   },
   data() {
     return {
