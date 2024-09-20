@@ -14,11 +14,8 @@
           <button type="submit" class="btn btn-primary" ref="submitButton">Submit</button>
       </form>
     </div>
-
-    <div v-if="showVotingPhaseNotify" class="voting-phase-notify">
-        <h1>Voting Phase:</h1>
-        <p>Decide which questions you're comfortable with answering</p>
-    </div>
+    
+    <VotingPhaseNotify v-if="showVotingPhaseNotify" />
 
     <div v-if="showVotingCards" class="cardholder">
         <!-- Dynamically load question cards -->
@@ -76,12 +73,14 @@ body {
 import axios from 'axios';
 
 import Lobby from './components/Lobby.vue';
+import VotingPhaseNotify from './components/VotingPhaseNotify.vue';
 
 const API_URL = 'http://192.168.2.158:5000';
 
 export default {
   components: {
-    Lobby
+    Lobby,
+    VotingPhaseNotify
   },
   data() {
     return {
