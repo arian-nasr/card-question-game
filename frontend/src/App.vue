@@ -14,7 +14,7 @@
           <button type="submit" class="btn btn-primary" ref="submitButton">Submit</button>
       </form>
     </div>
-    
+
     <VotingPhaseNotify v-if="showVotingPhaseNotify" />
 
     <div v-if="showVotingCards" class="cardholder">
@@ -30,14 +30,8 @@
         </div>
     </div>
 
-    <div v-if="showCommonCards" class="cardholder">
-        <!-- Dynamically load common cards -->
-        <div v-for="(question, index) in commonQuestions" :key="index" class="card">
-            <div class="card-body">
-                {{ question }}
-            </div>
-        </div>
-    </div>
+    <CommonCards v-if="showCommonCards" :commonQuestions="commonQuestions" />
+    
   </main>
 </template>
 <style>
@@ -74,13 +68,15 @@ import axios from 'axios';
 
 import Lobby from './components/Lobby.vue';
 import VotingPhaseNotify from './components/VotingPhaseNotify.vue';
+import CommonCards from './components/CommonCards.vue';
 
 const API_URL = 'http://192.168.2.158:5000';
 
 export default {
   components: {
     Lobby,
-    VotingPhaseNotify
+    VotingPhaseNotify,
+    CommonCards
   },
   data() {
     return {
