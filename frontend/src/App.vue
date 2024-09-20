@@ -92,8 +92,7 @@ export default {
         if (!this.approvedQuestions.includes(this.questions[index])) {
           this.approvedQuestions.push(this.questions[index]); // Add the question to the approved list if not already present
         }
-      }
-      if (!accept) {
+      } else {
         // Check if the question is not already in the rejected list
         if (!this.rejectedQuestions.includes(this.questions[index])) {
           this.rejectedQuestions.push(this.questions[index]); // Add the question to the rejected list if not already present
